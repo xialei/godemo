@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package services;
+option go_package = ".;services";
+service Compute {
+    rpc RunTask (TaskRequest) returns (TaskResponse);
+}
+
+message TaskRequest {
+    string msg = 1;
+}
+
+message TaskResponse {
+    string result = 1;
+}
