@@ -17,5 +17,6 @@ func main() {
 
 	// test.DemoFile()
 
-	test.DemoGoroutine()
+	// test.DemoGoroutine()
+	test.DemoClickhouse()
 }
