@@ -1,0 +1,91 @@
+在一些产品链复杂的场景，后端需要提供对应 WebApp、WebPC、APP、小程序、快应用等各端 API，此时 API 的粒度大小就显得格外重要，
+粗粒度会导致移动端不必要的流量损耗，细粒度则会造成函数爆炸 (Function Explosion)；
+在此情景下 Facebook 的工程师于 2015 年开源了 GraphQL 规范，让前端自己描述自己希望的数据形式，服务端则返回前端所描述的数据结构。
+
+GraphQL 的操作类型可以是 query、mutation 或 subscription，描述客户端希望进行什么样的操作
+
+query 查询：获取数据，比如查找，CRUD 中的 R
+mutation 变更：对数据进行变更，比如增加、删除、修改，CRUD 中的 CUD
+substription 订阅：当数据发生更改，进行消息推送
+
+在 Query 查询字段时，是并行执行的，而在 Mutation 变更的时候，是线性执行，一个接着一个，防止同时变更带来的竞态问题，
+比如说我们在一个请求中发送了两个 Mutation，那么前一个将始终在后一个之前执行。
+
+如果使用 GraphQL，那么后端将不再产出 API，而是将 Controller 层维护为 Resolver，和前端约定一套 Schema，
+这个 Schema 将用来生成接口文档，前端直接通过 Schema 或生成的接口文档来进行自己期望的请求。
+
+GraphiQL - history, doc, excution
+http://127.0.0.1:8080/index.html
+
+
+{
+  users(page: 1) {
+    username,
+    password
+  }
+}
+
+{
+  user(id: "user-1") {
+    username,
+    password,
+    info {
+      age,
+      firstName,
+      lastName
+    }
+  }
+}
+
+mutation {
+  userCreate(arg:{
+    username:"roger",
+    password: "hello",
+    info: {
+      age: 30,
+      firstName: "lei",
+      lastName: SOLO,
+    }
+  }) {
+    id,
+    username,
+    info {
+      firstName,
+      lastName,
+      age
+    }
+  }
+}
+
+mutation {
+  userUpdate(id:"user-601", arg:{
+    username:"roger",
+    password: "hello",
+    info: {
+      age: 30,
+      firstName: "lei",
+      lastName: SOLO,
+    }
+  }) {
+    id,
+    username,
+    info {
+      firstName,
+      lastName,
+      age
+    }
+  }
+}
+
+mutation {
+  userDelete(id:"user-601") {
+    id,
+    username,
+    info {
+      firstName,
+      lastName,
+      age
+    }
+  }
+}
+
