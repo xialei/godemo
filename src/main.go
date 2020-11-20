@@ -31,8 +31,12 @@ func main() {
 
 	// test.DemoGoroutine()
 	// test.DemoClickhouse()
+<<<<<<< HEAD
 	// startGraphQLServer()
 	// test.DemoObserver()
 	// test.DemoVisitor()
 	test.DBReadPerformance()
+=======
+	startGraphQLServer()
+>>>>>>> fc011bf682ae2da86b6cf3baf21d6cbaf2509e2a
 }

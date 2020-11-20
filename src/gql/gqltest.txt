@@ -58,7 +58,11 @@ mutation {
 }
 
 mutation {
+<<<<<<< HEAD
   userUpdate(id:"user-1", arg:{
+=======
+  userUpdate(id:"user-601", arg:{
+>>>>>>> fc011bf682ae2da86b6cf3baf21d6cbaf2509e2a
     username:"roger",
     password: "hello",
     info: {
@@ -78,7 +82,11 @@ mutation {
 }
 
 mutation {
+<<<<<<< HEAD
   userDelete(id:"user-1") {
+=======
+  userDelete(id:"user-601") {
+>>>>>>> fc011bf682ae2da86b6cf3baf21d6cbaf2509e2a
     id,
     username,
     info {
