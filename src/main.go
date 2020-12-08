@@ -1,8 +1,8 @@
 package main
 
 import (
+	"demo"
 	"sync"
-	"test"
 )
 
 func startGraphQLServer() {
@@ -11,7 +11,7 @@ func startGraphQLServer() {
 	wg.Add(1)
 
 	go func() {
-		msg, _ := test.StartGraphQL()
+		msg, _ := demo.StartGraphQL()
 		if msg == "exit" {
 			wg.Done()
 		}
@@ -21,22 +21,18 @@ func startGraphQLServer() {
 }
 
 func main() {
-	// test.DemoObjectOriented()
-
+	// demo.DemoObjectOriented()
 	// user.DemoUser()
-
-	// test.Flow()
-
-	// test.DemoFile()
-
-	// test.DemoGoroutine()
-	// test.DemoClickhouse()
-<<<<<<< HEAD
+	// demo.Flow()
+	// demo.DemoFile()
+	// demo.DemoGoroutine()
+	// demo.DemoClickhouse()
 	// startGraphQLServer()
-	// test.DemoObserver()
-	// test.DemoVisitor()
-	test.DBReadPerformance()
-=======
-	startGraphQLServer()
->>>>>>> fc011bf682ae2da86b6cf3baf21d6cbaf2509e2a
+	// demo.DemoObserver()
+	// demo.DemoVisitor()
+	// demo.DBReadPerformance()
+	// startGraphQLServer()
+
+	// demo pipeline
+	demo.MD5Sum("/Users/roger/Downloads/") //os.Args[1]
 }
