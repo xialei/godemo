@@ -1,7 +1,7 @@
 package main
 
 import (
-	"demo"
+	"godemo/demo"
 	"sync"
 )
 

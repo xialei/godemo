@@ -1,4 +1,4 @@
-# go demo
+# godemo
 
 >用go加速数据处理工作：
 1. 协程
@@ -10,11 +10,21 @@
   1. 下载go
   2. tar -C /usr/local -xzf go1.15.5.linux-amd64.tar.gz
   3. 设置环境变量 ~/.bash_profile
-  export GOPATH=/usr/local/go
-  PATH="$GOPATH/bin:${PATH}"
+  export GOROOT=/usr/local/go
+  PATH="$GOROOT/bin:${PATH}"
   export PATH
+  export GOPATH=/Users/roger/go
   export GOPROXY=https://mirrors.aliyun.com/goproxy/
   source ~/.bash_profile
+
+  go mod init  # 初始化go.mod
+  go mod tidy  # 更新依赖文件
+  go mod download  # 下载依赖文件
+  go mod vendor  # 将依赖转移至本地的vendor文件
+  go mod edit  # 手动修改依赖文件
+  go mod graph  # 打印依赖图
+  go mod verify  # 校验依赖
+
   4. 安装依赖包
   sudo go get -u github.com/go-sql-driver/mysql
   sudo go get go.mongodb.org/mongo-driver/mongo
