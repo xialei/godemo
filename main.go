@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"godemo/demo"
 	"sync"
 )
@@ -20,6 +21,12 @@ func startGraphQLServer() {
 	wg.Wait()
 }
 
+func test() {
+	var a []string
+	a = append(a, "testa")
+	fmt.Print(a)
+}
+
 func main() {
 	// demo.DemoObjectOriented()
 	// user.DemoUser()
@@ -34,5 +41,9 @@ func main() {
 	// startGraphQLServer()
 
 	// demo pipeline
-	demo.MD5Sum("/Users/roger/Downloads/") //os.Args[1]
+	// core.MD5Sum("/Users/roger/Downloads/") //os.Args[1]
+
+	demo.TestDgraph()
+
+	// test()
 }

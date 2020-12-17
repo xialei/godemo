@@ -2,7 +2,7 @@ package demo
 
 import (
 	"encoding/json"
-	"gql"
+	"godemo/gql"
 	"log"
 	"net/http"
 	"text/template"

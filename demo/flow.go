@@ -43,6 +43,6 @@ func demoDefer() {
 		fmt.Println("defer 2")
 	}()
 	panic("stop here")
-	fmt.Println("will not be reached as panic")
+	// fmt.Println("will not be reached as panic")
 
 }

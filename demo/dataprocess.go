@@ -3,6 +3,7 @@ package demo
 import (
 	"database/sql"
 	"fmt"
+	"godemo/core"
 	"sync"
 	"time"
 
@@ -22,19 +23,6 @@ const (
 	CHARSET  = "utf8"
 )
 
-// EntityBasic entity struct for companies
-type EntityBasic struct {
-	EntityID  int64           `db:"entity_id"`
-	Name      string          `db:"entity_name"`
-	LegalRep  sql.NullString  `db:"legal_rep_name"`
-	LegalType sql.NullInt32   `db:"legal_rep_type"`
-	Province  sql.NullString  `db:"reg_province"`
-	Cap       sql.NullFloat64 `db:"rec_cap"`
-	Found     sql.NullString  `db:"found_date"`
-	Type      sql.NullString  `db:"entity_kind"`
-	Logo      sql.NullString  `db:"logo"`
-}
-
 func processData() {
 	var wg = sync.WaitGroup{}
 
@@ -43,7 +31,7 @@ func processData() {
 
 	each := 700000
 	total := 70000000 / each
-	g := New(20)
+	g := core.New(20)
 	updateTime := time.Unix(time.Now().AddDate(0, 0, -1).Unix(), 0).Format("2006-01-02 00:00:00")
 	fmt.Printf("update time: %s\n", updateTime)
 

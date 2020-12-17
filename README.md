@@ -45,3 +45,14 @@
 - [json-iterator for Go](https://github.com/json-iterator/go)
   go get github.com/json-iterator/go
 
+- [dgraph](https://dgraph.io/tour/)
+  ```
+  连接数据，例如需要连接的SQL表
+  高级搜索
+  推荐引擎
+  模式检测
+  网络
+  流程，例如商业流程及生物流程
+  事件以及它们之间的因果或其他联系
+  公司或者市场的结构
+  ```

@@ -1,4 +1,4 @@
-package demo
+package core
 
 type Glimit struct {
 	n  int
