@@ -14,8 +14,8 @@ var (
 
 const (
 	UserName        = "root"
-	Password        = "Ysbu2!nDiwsv"
-	HOST            = "47.101.185.137" //inner ip
+	Password        = "Ysbu2!nDiwsvxl"
+	HOST            = "10.101.185.137" //inner ip
 	PORT            = "3306"
 	DATABASE        = "z_pe"
 	CHARSET         = "utf8"
