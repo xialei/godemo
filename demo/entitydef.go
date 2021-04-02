@@ -24,6 +24,7 @@ type Company struct {
 
 type Investor struct {
 	// company_id, company_name, invest_id, financing_Date, financing_round, financing_amount
+	uid   string
 	ID    int64          `db:"gp_id"`
 	Name  string         `db:"gp_name"`
 	Brand sql.NullString `db:"gp_brand"`

@@ -16,14 +16,17 @@ import (
 )
 
 var (
-	dgraph          = flag.String("d", "localhost:9080", "Dgraph Alpha address")
-	company_map     = make(map[int64]Company)
-	investor_map    = make(map[int64]Investor)
-	event_map       = make(map[int32]InvEvent)
-	company_fin_map = make(map[int64]CompanyFin)
+	dgraph            = flag.String("d", "localhost:9080", "Dgraph Alpha address")
+	company_map       = make(map[int64]Company)
+	investor_map      = make(map[int64]Investor)
+	event_map         = make(map[int32]InvEvent)
+	company_fin_map   = make(map[int64]CompanyFin)
+	investor_uids_map = make(map[int64]string)
 )
 
 func buildDgraph() {
+	fmt.Println("== start to build dgraph")
+
 	flag.Parse()
 	conn, err := grpc.Dial(*dgraph, grpc.WithInsecure())
 	if err != nil {
@@ -37,49 +40,53 @@ func buildDgraph() {
 		log.Fatal(err)
 	}
 
-	// op := &api.Operation{
-	// 	Schema: `name: string @index(term) .
-	// 					  sector: string .
-	// 					  ipo: int .
-	// 					  area: string .
-	// 					  events: [uid] .
-	// 					  type CompanyFin {
-	// 						id
-	// 						name
-	// 						sector
-	// 						ipo
-	// 						area
-	// 						events
-	// 					  }
-	// 					  type InvEvent {
-	// 						invid
-	// 						compid
-	// 						compname
-	// 						invdate
-	// 						round
-	// 						amt
-	// 						investors
-	// 					  }
-	// 					  type Investor {
-	// 						id
-	// 						name
-	// 						brand
-	// 					  }`,
-	// 	RunInBackground: true,
-	// }
-	// err = client.Alter(ctx, op)
-	// if err != nil {
-	// 	fmt.Printf("alter schema err: %d\n", err)
-	// }
+	op := &api.Operation{
+		Schema:          `name: string @index(term) .`,
+		RunInBackground: true,
+	}
+	err = client.Alter(ctx, op)
+	if err != nil {
+		fmt.Printf("alter schema err: %d\n", err)
+	}
 
 	mu := &api.Mutation{CommitNow: true}
-	for _, v := range company_fin_map {
+	for _, v := range investor_map {
 		pb, err1 := json.Marshal(v)
 		if err1 != nil {
 			fmt.Printf("commit mutation err: %d\n", err1)
 		}
 		mu.SetJson = pb
-		_, err = client.NewTxn().Mutate(ctx, mu)
+		resp, err := client.NewTxn().Mutate(ctx, mu)
+		uid_map := resp.GetUids()
+		for _, inv_uid := range uid_map {
+			investor_uids_map[v.ID] = inv_uid
+		}
+
+		if err != nil {
+			fmt.Printf("commit mutation err: %d\n", err)
+		}
+	}
+	fmt.Printf("investor_uids: %d\n", len(investor_uids_map))
+
+	for _, v := range company_fin_map {
+
+		eventlist := v.InvEvents
+		for eindx, event := range eventlist {
+			investor_list := event.Investors
+
+			for i, v := range investor_list {
+				investor_list[i].uid = investor_uids_map[v.ID]
+			}
+			eventlist[eindx].Investors = investor_list
+		}
+		v.InvEvents = eventlist
+
+		pb, err1 := json.Marshal(v)
+		if err1 != nil {
+			fmt.Printf("commit mutation err: %d\n", err1)
+		}
+		mu.SetJson = pb
+		_, err := client.NewTxn().Mutate(ctx, mu)
 		if err != nil {
 			fmt.Printf("commit mutation err: %d\n", err)
 		}
@@ -128,11 +135,12 @@ func prepareData() {
 		}
 		investor_map[investor.ID] = investor
 	}
+	fmt.Printf("investor_map: %d\n", len(investor_map))
 
 	fmt.Println("2. start to get companies")
 
 	sql = `select a.company_id, a.company_name, b.name as sector, 
-	case when c.is_preipo = 1 then 2 when c.is_ipo = 0 then 0 when c.is_ipo = 1 then 1  END as ipo, 
+	case when c.is_preipo = 1 then 2 when c.is_ipo = 0 then 0 when c.is_ipo = 1 then 1  else 0 END as ipo, 
 	a.location_province as area from pe_company_basic_info a 
 	left join base_industry as b on a.sector=b.code 
 	left join pe_company_filing_status as c on a.company_id = c.entity_id 
@@ -155,6 +163,7 @@ func prepareData() {
 		}
 		company_map[company.ID] = company
 	}
+	fmt.Printf("company_map: %d\n", len(company_map))
 
 	fmt.Println("3. start to get events")
 
@@ -201,7 +210,7 @@ func prepareData() {
 
 	}
 
-	fmt.Println(len(company_fin_map))
+	fmt.Printf("companyfin_map: %d\n", len(company_fin_map))
 
 }
 

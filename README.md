@@ -28,6 +28,8 @@
   4. 安装依赖包
   sudo go get -u github.com/go-sql-driver/mysql
   sudo go get go.mongodb.org/mongo-driver/mongo
+  
+  sudo go get -u github.com/ip2location/ip2location-go # 如果仅需要查询IPv4地址，请使用IPv4 BIN文件。
   ```
 
 ### 项目说明
@@ -55,4 +57,39 @@
   流程，例如商业流程及生物流程
   事件以及它们之间的因果或其他联系
   公司或者市场的结构
+  ```
+  Dgraph使用function和filter对查询数据进行过滤. 在dgraph中function和filter的区别仅在于放位置的不同.下面是支持的function和filter:
+  ![dgraph_function](files/dgraph.png)
+  dgraph可以通过as关键词将一个查询块的任意部分设为一个变量, 以供后面的子查询或者其它查询块使用. 这个变量本质上是一个uid列表, 因此要利用uid函数进行引用.
+  [贝壳](https://www.6aiq.com/article/1586914787766)
+  ```
+  {
+    #查询名叫"Peter Jackson"的人的自导自演电影和扮演的角色
+    PJ as var(func:allofterms(name, "Peter Jackson")) {
+      F as director.film
+    }
+
+    peterJ(func: uid(PJ))  {
+      name 
+      actor.film {
+        performance.film @filter(uid(F)) {
+          film_name: name
+        }
+        performance.character {
+          character: name
+        }
+      }
+    }
+  }
+  ```
+  Dgraph 用facets描述边的自定义属性
+  ```
+  query
+  {
+    data(func: eq(name, "Alice")) {
+       name
+       mobile @facets(since)
+       car @facets(since)
+    }
+  }
   ```

@@ -43,7 +43,8 @@ func main() {
 	// demo pipeline
 	// core.MD5Sum("/Users/roger/Downloads/") //os.Args[1]
 
-	demo.TestDgraph()
+	// demo.TestDgraph()
+	demo.TestEncrypt()
 
 	// test()
 }
